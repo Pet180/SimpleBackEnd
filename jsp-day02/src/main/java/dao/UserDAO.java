@@ -47,6 +47,46 @@ public class UserDAO {
 		return user;
 	}
 	
+	//透過ID找出該使用者的資料
+	public User findUserById(int id){
+		Connection conn = null;
+		User user = null;  
+		try {
+			conn = DBUtils.getConn();
+			String sql = "SELECT * FROM t_user WHERE id=?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			if (rs.next()) {
+				user = new User();
+				user.setId(rs.getInt("id"));
+				user.setUname(rs.getString("username"));
+				user.setPwd(rs.getString("password"));
+				user.setPhone(rs.getString("phone"));
+				user.setEmail(rs.getString("email"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return user;
+		
+	}
+	//更新使用者資料
+	public User updateUserInfo(int id,User user){
+		Connection conn = null;
+		try {
+			conn = DBUtils.getConn();
+			String sql = "UPDATE t_user set password=? WHERE id=?";
+			PreparedStatement ps = conn.prepareStatement(sql);
+			ps.setString(1, user.getPwd());
+			ps.setInt(2, id);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+				
+		return null;
+	}
 	
 	public void delete(int id){
 		Connection conn = null;
